@@ -10,10 +10,10 @@ import org.altbeacon.beacon.*
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
 import android.Manifest
 import android.app.*
-import android.content.Intent
-import android.os.IBinder
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
+import android.bluetooth.le.AdvertiseCallback
+import android.bluetooth.le.AdvertiseSettings
+
+const val APP_UUID : String = "31049370-03e0-459f-b832-da0666df02f8"
 
 class MainActivity : AppCompatActivity(), BeaconConsumer {
     var beaconManager: BeaconManager? = null
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
     private fun startTransmitter() {
         Log.i("bluetooth", "starting transmitter")
         var beaconBuilder = Beacon.Builder()
-        beaconBuilder.setId1("31049370-03e0-459f-b832-da0666df02f8")
+        beaconBuilder.setId1(APP_UUID)
         beaconBuilder.setId2("0")
         beaconBuilder.setId3("0")
         beaconBuilder.setManufacturer(0x004c)
@@ -33,8 +33,15 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
         var parser = BeaconParser()
         parser.setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24")
         transmitter = BeaconTransmitter(applicationContext, parser)
-        transmitter?.startAdvertising(beacon)
-        Log.i("bluetooth", "transmitter started")
+        transmitter?.startAdvertising(beacon, object: AdvertiseCallback() {
+            override fun onStartFailure(errorCode: Int) {
+                Log.w("bluetooth", "transmitter failed with error code $errorCode")
+            }
+
+            override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
+                Log.i("bluetooth", "transmitter started")
+            }
+        })
     }
 
     private fun createNotificationChannel(channelId: String, channelName: String): String {
@@ -90,9 +97,13 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
         var builder = Notification.Builder(this.applicationContext, channelId)
         beaconManager?.enableForegroundServiceScanning(builder.build(), 456)
         beaconManager?.setEnableScheduledScanJobs(false)
+        beaconManager?.isRegionStatePersistenceEnabled = false
 
         // enable ibeacons
-        beaconManager?.beaconParsers?.add(BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
+        var parser = BeaconParser()
+        parser.setHardwareAssistManufacturerCodes(intArrayOf(0x004c))
+        parser.setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24")
+        beaconManager?.beaconParsers?.add(parser)
         beaconManager?.bind(this)
 
         backgroundPowerSaver = BackgroundPowerSaver(this)
@@ -105,14 +116,14 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
     }
 
     override fun onBeaconServiceConnect() {
-        beaconManager?.removeAllMonitorNotifiers();
+        beaconManager?.removeAllMonitorNotifiers()
         beaconManager?.addRangeNotifier { beacons, _ ->
             Log.i(
                 "bluetooth",
-                "ranged ${beacons?.size} beacons"
+                "ranged $beacons beacons"
             )
         }
-        beaconManager?.startMonitoringBeaconsInRegion(Region("contact-tracing", null, null, null))
+        beaconManager?.startRangingBeaconsInRegion(Region("contact-tracing", null, null, null))
         Log.i("bluetooth", "listener started")
 
         startTransmitter()
