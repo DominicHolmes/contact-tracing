@@ -14,6 +14,10 @@ class Device(models.Model):
 
 
 class Contact(models.Model):
-    self_device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    other_device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    self_device = models.ForeignKey(
+        Device, on_delete=models.CASCADE, related_name="self_logged"
+    )
+    other_device = models.ForeignKey(
+        Device, on_delete=models.CASCADE, related_name="others_logged"
+    )
     timestamp = models.DateTimeField(default=timezone.now)

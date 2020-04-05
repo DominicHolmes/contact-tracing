@@ -13,6 +13,7 @@ django-rest-framework = "*"
 django-push-notifications = "*"
 django-extensions = "*"
 dj-database-url = "*"
+django-heroku = "*"
 
 [requires]
 python_version = "3"
