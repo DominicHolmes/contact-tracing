@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "push_notifications",
+    "users",
 ]
 
 MIDDLEWARE = [
