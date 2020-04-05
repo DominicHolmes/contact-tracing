@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Device(models.Model):
@@ -10,3 +11,9 @@ class Device(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Contact(models.Model):
+    self_device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    other_device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
