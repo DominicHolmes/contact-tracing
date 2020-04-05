@@ -14,6 +14,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:text="Stop the Spread"
+        android:fontFamily="@font/lato"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +46,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
             android:text="Tracking: ON"
+            android:fontFamily="@font/lato"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,8 +59,59 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:text="Back home? Turn me off to save battery."
+            android:fontFamily="@font/lato"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblTrackingTitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/lblPrimaryStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:fontFamily="@font/notoserif"
+        android:text="You're doing great!"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutTracking" />
+
+    <Button
+        android:id="@+id/btnShare"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:text="Share my Status"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/lblStatusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+        android:text="Tested positive for COVID-19?"
+        android:fontFamily="@font/lato"
+        app:layout_constraintBottom_toTopOf="@+id/btnShare"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/lblPrimaryDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/lato"
+        android:text="There are no known exposures to anyone with COVID-19."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblPrimaryStatus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
